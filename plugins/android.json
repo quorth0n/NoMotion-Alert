@@ -1,0 +1,25 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-sms-plugin": {
+            "PACKAGE_NAME": "io.github.whirish.InMotionAlert"
+        },
+        "cordova-plugin-camera": {
+            "PACKAGE_NAME": "io.github.whirish.InMotionAlert"
+        },
+        "me.rahul.plugins.camerapicturebackground": {
+            "PACKAGE_NAME": "io.github.whirish.InMotionAlert"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "io.github.whirish.InMotionAlert"
+        }
+    }
+}
