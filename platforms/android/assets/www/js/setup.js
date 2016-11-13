@@ -52,7 +52,6 @@ app.initialize();
 
 $('#don1').click(function () {
   localStorage.phone = $('#numberTxt').val();
-  localStorage.hname = $('#hname').val();
   localStorage.pname = $('#pname').val()
   window.location.replace('./index.html');
 });

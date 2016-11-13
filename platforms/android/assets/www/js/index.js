@@ -1,29 +1,9 @@
-/*
- * Licensed to the Apache Software Foundation (ASF) under one
- * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
- * regarding copyright ownership.  The ASF licenses this file
- * to you under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance
- * with the License.  You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
- function sleepFor( sleepDuration ){
-     var now = new Date().getTime();
-     while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
- }
 var base = [];
 var d1 = new Date();
 var d2 = new Date();
+var d3 = new Date()
 var hasChanged = false;
+var i = 0;
 var app = {
   sendSms: function(date) {
     var number = localStorage.phone;
@@ -38,29 +18,37 @@ var app = {
 
     var success = function () { alert('Message sent successfully'); };
     var error = function (e) { alert('Message Failed:' + e); };
-    sms.send(number, 'No motion detected in ' + localStorage.hname + ' since ' + date.toDateString() + ' ' + date.toLocaleTimeString(), options, success, error);
+    sms.send(number, 'No motion detected in ' + localStorage.pname + '\'s house since ' + d3.toDateString() + ' ' + d3.toLocaleTimeString(), options, success, error);
   },
   pic: function() {
     var options =   {   quality: 50,
                     destinationType: Camera.DestinationType.DATA_URL,
                     sourceType: 1,      // 0:Photo Library, 1=Camera, 2=Saved Album
-                    encodingType: 0,     // 0=JPG 1=PNG
+                    encodingType: 1,     // 0=JPG 1=PNG
                     allowEdit: false
                 };
     navigator.camera.getPicture(
     function(imgData) {
-        var ctx = document.getElementById("c"+(base.length+1)).getContext("2d");
+        i++;
+        var ctx = document.getElementById("c"+i).getContext("2d");
+        console.log(i);
         var image = new Image();
         image.onload = function() {
-            ctx.drawImage(image, 0, 0, 612, 816);
+            ctx.drawImage(image, 0, 0, 1224, 1632);
         };
-        image.src = "data:image/jpeg;base64,"+imgData;
+        image.src = "data:image/png;base64,"+imgData;
         base.push('test');
         console.log(hasChanged);
-        console.log(base.length);
-        if (base.length == 2) {
-          app.compare();
+        if (base.length >= 2) {
+          i = 0;
+          console.log('comp:'+image.complete);
+          if (image.complete) {
+            setTimeout(function () {
+              app.compare();
+            }, 2000);
+          }
         }
+        setTimeout(app.pic, 20000);
     },
     function() {
         alert('Error taking picture', 'Error');
@@ -103,36 +91,27 @@ var app = {
 
     // Update DOM on a Received Event
     receivedEvent: function(id) {
-        var parentElement = document.getElementById(id);
-        var listeningElement = parentElement.querySelector('.listening');
-        var receivedElement = parentElement.querySelector('.received');
-
-        listeningElement.setAttribute('style', 'display:none;');
-        receivedElement.setAttribute('style', 'display:block;');
-
-        console.log('Received Event: ' + id);
     },
 
     compare: function() {
         console.log('comparing...');
-        sleepFor(2000);
+        //sleepFor(2000);
         d2 = new Date();
-        var width = 612;
-        var height = 816;
+        var width = 1224;
+        var height = 1632;
         var img1 = document.getElementById('c1').getContext('2d').getImageData(0, 0, width, height);
         var img2 = document.getElementById('c2').getContext('2d').getImageData(0, 0, width, height);
-        var diff = document.getElementById('cd').getContext('2d').createImageData(width, height);
-        var x = pixelmatch(img1.data, img2.data, diff.data, width, height, {threshold: 0.1});
+        var x = pixelmatch(img1.data, img2.data, null, width, height, {threshold: 0.1});
 
-        if ((x / (width*height) * 100).toFixed(0) < 10) {
-            console.log('same, difference percent: ' + (x / (width*height) * 100).toFixed(0));
+        if ((x / (width*height) * 100).toFixed(0) < 20) {
+            $('h2').text('same, difference percent: ' + (x / (width*height) * 100).toFixed(0));
         } else {
-            console.log('diff, difference percent: ' + (x / (width*height) * 100).toFixed(0));
+            $('h2').text('diff, difference percent: ' + (x / (width*height) * 100).toFixed(0));
             hasChanged = true;
         }
 
-        if (!hasChanged && d2.getTime() - d1.getTime() >= 30000) {
-          alert('grandpa has died');
+        console.log(d2.getTime());
+        if (!hasChanged && new Date().getTime() - d1.getTime() >= 40000) {
           app.sendSms(d1);
         }
 
@@ -141,6 +120,11 @@ var app = {
         }
     }
 };
-setInterval(app.pic, 15000);
 
 app.initialize();
+
+$('.app').click(function () {
+    $('.app').attr('style', '-webkit-animation:fade 3000ms infinite;background:url(./img/recording.png) no-repeat center top !important;');
+    $('h1').text('Monitoring...');
+    $('h2').text('');
+});

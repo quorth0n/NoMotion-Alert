@@ -24,11 +24,11 @@
             https://github.com/apache/cordova-plugin-whitelist/blob/master/README.md#content-security-policy
         Some notes:
             * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
-            * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+            * https://ssl.gstatic.com is required o15nly on Android and is needed for TalkBack to function properly
             * Disables use of inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
                 * Enable inline JS: add 'unsafe-inline' to default-src
         -->
-        <meta http-equiv="Content-Security-Policy" content="data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src * data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -36,21 +36,20 @@
         <title>InMotion Alert</title>
     </head>
     <body>
-        <div class="app">
-            <h1>Apache Cordova</h1>
-            <img src="" alt="" />
-            <canvas style="display:none;" id="c1" width="612" height="816"></canvas>
-            <canvas style="display:none;" id="c2" width="612" height="816"></canvas>
-            <canvas style="display:none;" id="cd" width="612" height="816"></canvas>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to De2vice</p>
+        <div class="app" onclick="app.pic()">
+            <h1>InMotion&trade; Alert</h1>
+            <h2>Tap to begin monitoring</h2>
+            <canvas style="display:none;" id="c1" width="1224" height="1632"></canvas>
+            <canvas style="display:none;" id="c2" width="1224" height="1632"></canvas>
+            <!-- <div id="deviceready" class="blink">
+                <p class="event listening">Connecting to Device</p>
                 <p class="event received">Device is Ready</p>
                 <input id="numberTxt" placeholder="Enter mobile number" value="" type="tel" />
                 <input type="number" id="num" value="5"> hours before notification
                 <input type="button" onclick="app.sendSms()" value="Send SMS" />
                 <button type="button" onclick="app.pic()" name="button">Take pic</button>
-                <button type="button" onclick="app.compare()" name="button">Compare</button>
-            </div>
+                <button type="button" id="comp" onclick="app.compare()" name="button">Compare</button>
+            </div> -->
         </div>
         <script src="./js/jquery-3.1.1.min.js" charset="utf-8"></script>
         <script src="./js/pixelmatch.js" charset="utf-8"></script>
