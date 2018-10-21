@@ -1,5 +1,5 @@
 # NoMotion-Alert
-Made for DHS Hackathon 
+Originally created for DHS Hackathon 
 
 # Problem
 Do you have an eldery relative who lives alone? Do you wonder if that person is doing ok? Have they fallen and can't get up? 
